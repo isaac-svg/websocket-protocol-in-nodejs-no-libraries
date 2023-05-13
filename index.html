@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Websocket client</title>
+  </head>
+  <body style="background-color: black; color: white">
+    <output id="messages"></output>
+
+    <script>
+      const messages = document.querySelector("#messages");
+      const socket = new WebSocket("ws://localhost:3999");
+      console.log("object");
+      socket.onopen = (event) => {
+        console.log(`Web socket connected :`);
+        const id = Math.round(Math.random() * 100);
+
+        const interval = setInterval(() => {
+          const data = JSON.stringify([
+            {
+              id,
+              name: "isaac sakyi",
+              address: {
+                street: "wall street",
+                number: 20 * id,
+              },
+              profession: "software engineer",
+            },
+
+            {
+              id,
+              name: "isaac sakyi",
+              address: {
+                street: "wall street",
+                number: 30 * id,
+              },
+              profession: "software engineer",
+            },
+          ]);
+          socket.send(data);
+        }, 1000);
+
+        setTimeout(() => {
+          clearInterval(interval);
+        }, 5000);
+      };
+      socket.onmessage = (msg) => {
+        const message = msg.data;
+        messages.innerHTML += message;
+        console.log(`Web socket msg :`, message);
+      };
+      socket.onerror = (error) => console.log(`Web socket error :`, error);
+      socket.onclose = (event) => console.log(`Web socket closed :`, event);
+    </script>
+  </body>
+</html>
