@@ -46,12 +46,12 @@ function onSocketReadable(socket) {
   }
   // the  3rd to 6th inclusive byte holds the encryption or mask key so we must read that one too off
   const maskKey = socket.read(MASK_KEY_BYTE_LENGTH); // maskKey -> [array buffer with keys]
-  console.log({ maskKey: maskKey });
+  // console.log({ maskKey: maskKey });
   // now the remaining byte contains our data or payload
   const encoded = socket.read(messageLength);
-  console.log(encoded);
+  // console.log(encoded);
   const decoded = unmask(encoded, maskKey);
-  console.log(decoded);
+  // console.log(decoded);
   const recievedData = decoded.toString("utf8");
 
   const data = JSON.parse(recievedData);
